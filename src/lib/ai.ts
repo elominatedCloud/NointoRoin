@@ -35,6 +35,7 @@ export function generateEasyExplanation(job: Job): EasyJobSummary {
 type VoiceAnswerContext = {
   previousWork?: string;
   healthLimit?: string;
+  preferredTime?: string;
 };
 
 export function createVoiceAnswer(
@@ -46,6 +47,7 @@ export function createVoiceAnswer(
   const normalized = transcript.trim();
   const previousWork = context.previousWork?.trim();
   const healthLimit = context.healthLimit?.trim();
+  const preferredTime = context.preferredTime?.trim();
 
   if (isRecommend) {
     return {
@@ -55,12 +57,13 @@ export function createVoiceAnswer(
         : "해보신 일을 더 알려주시면 더 잘 맞는 일을 찾을 수 있습니다. 우선 안내 도우미나 가벼운 정리 보조 일자리부터 확인해보시면 좋겠습니다.",
       eligibility:
         "나이와 사는 지역에 따라 다릅니다. 주민센터나 시니어클럽에서 현재 모집 중인지 확인해야 합니다.",
-      workCondition:
-        "공공 일자리는 보통 하루 3시간 정도, 주 2일에서 4일 정도 일하는 경우가 많습니다.",
+      workCondition: preferredTime
+        ? `${preferredTime}에 맞는 짧은 근무부터 확인해보시면 좋겠습니다. 공공 일자리는 보통 하루 3시간 정도, 주 2일에서 4일 정도 일하는 경우가 많습니다.`
+        : "공공 일자리는 보통 하루 3시간 정도, 주 2일에서 4일 정도 일하는 경우가 많습니다.",
       applicationGuide: [
         "사는 곳 주민센터에 전화합니다.",
         "노인 일자리 또는 공공 일자리 담당자를 찾습니다.",
-        "나이, 사는 동네, 원하는 근무 시간을 말합니다.",
+        "나이, 사는 동네, 해보신 일, 조심해야 할 몸 상태를 말합니다.",
         "신분증을 가지고 방문해 신청서를 작성합니다.",
       ],
       caution: healthLimit

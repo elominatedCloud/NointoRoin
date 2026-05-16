@@ -8,12 +8,14 @@ export async function POST(request: Request) {
   const transcript = typeof body?.transcript === "string" ? body.transcript : "";
   const previousWork = typeof body?.previousWork === "string" ? body.previousWork : "";
   const healthLimit = typeof body?.healthLimit === "string" ? body.healthLimit : "";
+  const preferredTime = typeof body?.preferredTime === "string" ? body.preferredTime : "";
 
   return NextResponse.json({
     ok: true,
     result: createVoiceAnswer(mode, transcript, {
       previousWork,
       healthLimit,
+      preferredTime,
     }),
   });
 }

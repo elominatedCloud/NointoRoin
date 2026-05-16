@@ -14,6 +14,7 @@ export type VoiceJobHelperRequest = {
   transcript: string;
   previousWork?: string;
   healthLimit?: string;
+  preferredTime?: string;
 };
 
 export type VoiceJobHelperResponse = {
