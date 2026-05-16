@@ -11,6 +11,7 @@ import { ResultCard } from "@/components/senior/ResultCard";
 import { SeniorLayout } from "@/components/senior/SeniorLayout";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import type { EasyJobSummary } from "@/types/ai";
+import { Phone, Volume2 } from "lucide-react";
 
 const fallbackResult: EasyJobSummary = {
   title: "신청 가능한 일자리 안내",
@@ -63,9 +64,9 @@ export function ResultClient({ initialResult }: ResultClientProps) {
   return (
     <SeniorLayout showHomeLink>
       <ReadAloudText result={result} />
-      <section className="rounded-[24px] bg-white p-5 shadow-lg shadow-emerald-950/10">
-        <p className="text-[19px] font-black text-[#1f6f4a]">현재 공고</p>
-        <h1 className="mt-2 text-[27px] font-black leading-tight">{result.title}</h1>
+      <section className="rounded-[28px] bg-white p-5 shadow-lg shadow-emerald-950/10">
+        <p className="text-[20px] font-black text-[#1f6f4a]">현재 공고</p>
+        <h1 className="mt-2 text-[28px] font-black leading-tight">{result.title}</h1>
         {result.organization || result.workLocation ? (
           <p className="mt-3 text-[20px] font-bold leading-snug text-[#526157]">
             {[result.organization, result.workLocation].filter(Boolean).join(" · ")}
@@ -75,33 +76,49 @@ export function ResultClient({ initialResult }: ResultClientProps) {
       {isApplying ? (
         <section className="mt-5 rounded-[28px] bg-white px-6 py-6 shadow-xl shadow-emerald-950/10">
           <h2 className="text-[28px] font-black leading-tight">신청하려면</h2>
-          <ol className="mt-4 grid gap-3 text-[22px] font-bold leading-relaxed">
-            {result.applicationGuide.map((step) => (
-              <li key={step}>{step}</li>
+          <ol className="mt-5 grid gap-4">
+            {result.applicationGuide.map((step, index) => (
+              <li className="grid grid-cols-[42px_1fr] gap-3 text-[21px] font-bold leading-relaxed" key={step}>
+                <span className="flex size-[42px] items-center justify-center rounded-full bg-[#1f6f4a] text-[18px] font-black text-white">
+                  {index + 1}
+                </span>
+                <span>{step}</span>
+              </li>
             ))}
           </ol>
           <div className="mt-6 grid gap-5">
             {phoneHref ? (
-              <BigButton href={phoneHref}>전화하기</BigButton>
+              <BigButton href={phoneHref} variant="action">
+                <span className="flex items-center gap-3">
+                  <Phone aria-hidden="true" size={28} strokeWidth={3} />
+                  전화하기
+                </span>
+              </BigButton>
             ) : (
               <BigButton disabled>전화번호 확인 필요</BigButton>
             )}
             <BigButton onClick={() => speak(guideText)} variant="secondary">
-              안내 다시 듣기
+              <span className="flex items-center gap-3">
+                <Volume2 aria-hidden="true" size={28} strokeWidth={3} />
+                안내 다시 듣기
+              </span>
             </BigButton>
           </div>
         </section>
       ) : (
         <div className="mt-5 grid gap-5">
-          <BigButton onClick={() => speak(fullText)}>
-            {isSpeaking ? "읽는 중입니다" : "다시 듣기"}
+          <BigButton onClick={() => speak(fullText)} variant="quiet">
+            <span className="flex items-center gap-3">
+              <Volume2 aria-hidden="true" size={28} strokeWidth={3} />
+              {isSpeaking ? "읽는 중입니다" : "설명 다시 듣기"}
+            </span>
           </BigButton>
           <BigButton
             onClick={() => {
               setIsApplying(true);
               speak(guideText);
             }}
-            variant="secondary"
+            variant="action"
           >
             신청하기
           </BigButton>

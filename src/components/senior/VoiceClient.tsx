@@ -2,7 +2,8 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { Home, Mic } from "lucide-react";
+import Link from "next/link";
+import { ArrowLeft, CheckCircle2, Home, Mic, Volume2 } from "lucide-react";
 import { BigButton } from "@/components/senior/BigButton";
 import { SeniorLayout } from "@/components/senior/SeniorLayout";
 import { VoiceButton } from "@/components/senior/VoiceButton";
@@ -111,6 +112,8 @@ const recommendSteps: Record<RecommendStepId, RecommendStep> = {
   },
 };
 
+const recommendStepOrder: RecommendStepId[] = ["work", "health", "healthDetail", "time"];
+
 export function VoiceClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -124,6 +127,9 @@ export function VoiceClient() {
   const [isSubmittingRecommendation, setIsSubmittingRecommendation] = useState(false);
   const isRecommendMode = mode === "recommend";
   const currentStep = recommendSteps[stepId];
+  const visibleStepOrder = healthLimit === "특별히 아픈 곳 없음" ? ["work", "health", "time"] : recommendStepOrder;
+  const currentStepNumber = Math.max(1, visibleStepOrder.indexOf(stepId) + 1);
+  const totalStepCount = visibleStepOrder.length;
   const stepSpeech = useMemo(
     () =>
       `${currentStep.title}. ${currentStep.question} ${currentStep.choices
@@ -274,51 +280,87 @@ export function VoiceClient() {
   if (isRecommendMode) {
     return (
       <SeniorLayout>
-        <section className="rounded-[32px] bg-white px-7 py-8 shadow-xl shadow-emerald-950/10">
-          <h1 className="text-[32px] font-black leading-tight">
-            {currentStep.title}
-          </h1>
-          <p className="mt-8 text-[25px] font-black leading-relaxed">{currentStep.question}</p>
-          <div className="mt-8 grid gap-5">
+        <Link className="inline-flex items-center gap-2 text-[19px] font-black text-[#1f6f4a]" href="/senior">
+          <ArrowLeft aria-hidden="true" size={24} strokeWidth={3} />
+          처음으로
+        </Link>
+
+        <section className="mt-5 rounded-[32px] bg-white px-6 py-7 shadow-xl shadow-emerald-950/10">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-[20px] font-black text-[#1f6f4a]">내 조건 상담</p>
+            <p className="rounded-full bg-[#eaf4ea] px-4 py-2 text-[18px] font-black text-[#1f6f4a]">
+              {currentStepNumber}/{totalStepCount}
+            </p>
+          </div>
+          <div className="mt-5 h-3 rounded-full bg-[#e3ede4]">
+            <div
+              className="h-3 rounded-full bg-[#1f6f4a] transition-all"
+              style={{ width: `${Math.round((currentStepNumber / totalStepCount) * 100)}%` }}
+            />
+          </div>
+
+          <h1 className="mt-8 text-[34px] font-black leading-tight">{currentStep.title}</h1>
+          <p className="mt-5 text-[24px] font-black leading-relaxed">{currentStep.question}</p>
+          <p className="mt-3 text-[19px] font-bold leading-relaxed text-[#526157]">
+            버튼을 누르거나 키보드 숫자 1, 2를 눌러도 됩니다.
+          </p>
+
+          <div className="mt-7 grid gap-4">
             {currentStep.choices.map((choice) => (
-              <BigButton
+              <button
+                className="grid min-h-[92px] grid-cols-[56px_1fr] items-center gap-4 rounded-[24px] border-2 border-[#dbe8dc] bg-white p-4 text-left shadow-md shadow-emerald-950/5 transition active:scale-[0.99] disabled:opacity-60"
                 disabled={isSubmittingRecommendation}
                 key={choice.label}
                 onClick={() => void handleRecommendChoice(choice)}
-                variant={choice.label.startsWith("1번") ? "primary" : "secondary"}
+                type="button"
               >
-                {choice.label}
-              </BigButton>
+                <span className="flex size-14 items-center justify-center rounded-2xl bg-[#1f6f4a] text-[25px] font-black text-white">
+                  {choice.label.slice(0, 2).replace("번", "")}
+                </span>
+                <span className="text-[24px] font-black leading-tight">
+                  {choice.label.replace(/^\d번\s*/, "")}
+                </span>
+              </button>
             ))}
           </div>
           <button
-            className="mt-7 w-full text-center text-[22px] font-black text-[#1f6f4a]"
+            className="mt-6 flex min-h-[64px] w-full items-center justify-center gap-2 rounded-[20px] bg-[#eaf4ea] text-[21px] font-black text-[#1f6f4a]"
             onClick={() => speak(stepSpeech)}
             type="button"
           >
+            <Volume2 aria-hidden="true" size={26} strokeWidth={3} />
             질문 다시 듣기
           </button>
-          <a className="mt-5 block text-center text-[22px] font-black text-[#1f6f4a]" href="/senior">
-            처음으로
-          </a>
+          {isSubmittingRecommendation ? (
+            <p className="mt-5 flex items-center justify-center gap-2 text-[20px] font-black text-[#1f6f4a]">
+              <CheckCircle2 aria-hidden="true" size={24} strokeWidth={3} />
+              맞는 공고를 찾고 있습니다
+            </p>
+          ) : null}
         </section>
       </SeniorLayout>
     );
   }
 
   return (
-    <SeniorLayout>
-      <div className="rounded-[32px] bg-white px-7 py-9 shadow-xl shadow-emerald-950/10">
-        <h1 className="text-[34px] font-black leading-tight">편하게 말씀하세요</h1>
-        <p className="mt-9 text-[24px] font-black leading-relaxed">
-          예:
+      <SeniorLayout>
+      <Link className="inline-flex items-center gap-2 text-[19px] font-black text-[#1f6f4a]" href="/senior">
+        <ArrowLeft aria-hidden="true" size={24} strokeWidth={3} />
+        처음으로
+      </Link>
+
+      <div className="mt-5 rounded-[32px] bg-white px-6 py-8 shadow-xl shadow-emerald-950/10">
+        <h1 className="text-[34px] font-black leading-tight">
+          어려운 공고는
           <br />
-          &quot;내가 신청할 수 있는
-          <br />
-          일자리가 있나요?&quot;
+          말로 물어보세요
+        </h1>
+        <p className="mt-5 text-[22px] font-bold leading-relaxed text-[#526157]">
+          신청 조건, 몸에 무리가 되는 일, 전화해야 할 곳을 쉽게 설명해드립니다.
         </p>
-        <div className="my-9 flex justify-center">
-          <div className="flex h-28 w-28 items-center justify-center rounded-full bg-[#fff1c2] text-[#17211b]">
+
+        <div className="my-8 flex justify-center">
+          <div className="flex h-32 w-32 items-center justify-center rounded-full bg-[#fff3df] text-[#f36b21]">
             <Mic aria-hidden="true" size={56} strokeWidth={3} />
           </div>
         </div>

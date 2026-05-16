@@ -9,8 +9,9 @@ type EmployerLayoutProps = {
 
 export function EmployerLayout({ title, description, children }: EmployerLayoutProps) {
   return (
-    <main className="min-h-screen bg-slate-50 px-5 py-8 text-slate-950">
-      <div className="mx-auto max-w-5xl">
+    <main className="h-dvh overflow-hidden bg-slate-50 text-slate-950">
+      <div className="h-full overflow-y-auto px-5 pb-[calc(104px+env(safe-area-inset-bottom))] pt-8 md:pb-8">
+        <div className="mx-auto max-w-5xl">
         <header className="mb-8 flex flex-col gap-5 border-b border-slate-200 pb-6 md:flex-row md:items-end md:justify-between">
           <div>
             <Link className="text-sm font-black text-emerald-800" href="/employer">
@@ -22,6 +23,7 @@ export function EmployerLayout({ title, description, children }: EmployerLayoutP
           <EmployerNav />
         </header>
         {children}
+        </div>
       </div>
     </main>
   );

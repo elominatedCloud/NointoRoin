@@ -7,17 +7,19 @@ type BigButtonProps = {
   href?: string;
   onClick?: () => void;
   type?: "button" | "submit";
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "action" | "quiet";
   disabled?: boolean;
 };
 
 const variants = {
   primary: "bg-[#1f6f4a] text-white shadow-lg shadow-emerald-900/15",
   secondary: "border-2 border-[#1f6f4a] bg-white text-[#1f6f4a]",
+  action: "bg-[#f36b21] text-white shadow-lg shadow-orange-900/15",
+  quiet: "bg-[#eaf4ea] text-[#17211b]",
 };
 
 const baseClass =
-  "flex min-h-[72px] w-full items-center justify-center rounded-2xl px-6 text-center text-[22px] font-black leading-tight transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60";
+  "flex min-h-[72px] w-full items-center justify-center rounded-[22px] px-6 text-center text-[22px] font-black leading-tight transition active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-[#f36b21]";
 
 export function BigButton({
   children,
