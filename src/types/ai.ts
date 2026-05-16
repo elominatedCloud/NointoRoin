@@ -1,5 +1,8 @@
 export type EasyJobSummary = {
+  jobId?: string;
   title: string;
+  organization?: string | null;
+  workLocation?: string | null;
   summary: string;
   eligibility: string;
   workCondition: string;
