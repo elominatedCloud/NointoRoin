@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 import { Home, Mic } from "lucide-react";
 import { BigButton } from "@/components/senior/BigButton";
 import { SeniorLayout } from "@/components/senior/SeniorLayout";
@@ -19,9 +20,11 @@ export function VoiceClient() {
   const searchParams = useSearchParams();
   const mode = (searchParams.get("mode") === "recommend" ? "recommend" : "ask") satisfies VoiceMode;
   const { status, transcript, startListening } = useSpeechInput();
+  const [previousWork, setPreviousWork] = useState("");
+  const [healthLimit, setHealthLimit] = useState("");
+  const isRecommendMode = mode === "recommend";
 
-  async function handleStart() {
-    const spokenText = await startListening();
+  async function requestAnswer(spokenText: string) {
     const response = await fetch("/api/ai/voice-job-helper", {
       method: "POST",
       headers: {
@@ -30,6 +33,8 @@ export function VoiceClient() {
       body: JSON.stringify({
         mode,
         transcript: spokenText,
+        previousWork,
+        healthLimit,
       }),
     });
     const payload = (await response.json()) as VoiceJobHelperResponse;
@@ -38,6 +43,62 @@ export function VoiceClient() {
       sessionStorage.setItem("senior-ai-result", JSON.stringify(payload.result));
       router.push("/senior/result");
     }
+  }
+
+  async function handleStart() {
+    const spokenText = await startListening();
+    await requestAnswer(spokenText);
+  }
+
+  async function handleRecommendSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    await requestAnswer("내 조건에 맞는 일자리를 추천해주세요.");
+  }
+
+  if (isRecommendMode) {
+    return (
+      <SeniorLayout>
+        <form
+          className="rounded-[32px] bg-white px-7 py-8 shadow-xl shadow-emerald-950/10"
+          onSubmit={handleRecommendSubmit}
+        >
+          <h1 className="text-[32px] font-black leading-tight">
+            먼저 몸에 맞는지
+            <br />
+            여쭤볼게요
+          </h1>
+          <div className="mt-8 grid gap-6">
+            <label className="grid gap-3">
+              <span className="text-[24px] font-black leading-tight">전에 어떤 일을 해보셨어요?</span>
+              <textarea
+                className="min-h-28 rounded-2xl border-2 border-[#1f6f4a] bg-[#f7fbf4] px-4 py-4 text-[22px] font-bold leading-relaxed outline-none focus:ring-4 focus:ring-[#d8eadf]"
+                onChange={(event) => setPreviousWork(event.target.value)}
+                placeholder="예: 식당, 청소, 안내"
+                value={previousWork}
+              />
+            </label>
+            <label className="grid gap-3">
+              <span className="text-[24px] font-black leading-tight">아픈 곳이나 피하고 싶은 일이 있으세요?</span>
+              <textarea
+                className="min-h-28 rounded-2xl border-2 border-[#1f6f4a] bg-[#f7fbf4] px-4 py-4 text-[22px] font-bold leading-relaxed outline-none focus:ring-4 focus:ring-[#d8eadf]"
+                onChange={(event) => setHealthLimit(event.target.value)}
+                placeholder="예: 허리, 무릎, 무거운 물건"
+                value={healthLimit}
+              />
+            </label>
+          </div>
+          <div className="mt-8 grid gap-5">
+            <BigButton type="submit">추천 결과 듣기</BigButton>
+            <BigButton href="/senior" variant="secondary">
+              <span className="flex items-center gap-3">
+                <Home aria-hidden="true" size={28} strokeWidth={3} />
+                처음으로
+              </span>
+            </BigButton>
+          </div>
+        </form>
+      </SeniorLayout>
+    );
   }
 
   return (

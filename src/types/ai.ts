@@ -12,6 +12,8 @@ export type VoiceMode = "ask" | "recommend";
 export type VoiceJobHelperRequest = {
   mode: VoiceMode;
   transcript: string;
+  previousWork?: string;
+  healthLimit?: string;
 };
 
 export type VoiceJobHelperResponse = {

@@ -32,15 +32,27 @@ export function generateEasyExplanation(job: Job): EasyJobSummary {
   };
 }
 
-export function createVoiceAnswer(mode: VoiceMode, transcript: string): EasyJobSummary {
+type VoiceAnswerContext = {
+  previousWork?: string;
+  healthLimit?: string;
+};
+
+export function createVoiceAnswer(
+  mode: VoiceMode,
+  transcript: string,
+  context: VoiceAnswerContext = {},
+): EasyJobSummary {
   const isRecommend = mode === "recommend";
   const normalized = transcript.trim();
+  const previousWork = context.previousWork?.trim();
+  const healthLimit = context.healthLimit?.trim();
 
   if (isRecommend) {
     return {
       title: "내 조건에 맞는 일자리 추천",
-      summary:
-        "오전 짧은 시간에 할 수 있는 안내 도우미나 정리 보조 일자리부터 확인해보시면 좋겠습니다.",
+      summary: previousWork
+        ? `말씀하신 경험을 보면, ${previousWork} 같은 일을 해보셨습니다. 사람을 안내하거나 가볍게 정리하는 일부터 확인해보시면 좋겠습니다.`
+        : "해보신 일을 더 알려주시면 더 잘 맞는 일을 찾을 수 있습니다. 우선 안내 도우미나 가벼운 정리 보조 일자리부터 확인해보시면 좋겠습니다.",
       eligibility:
         "나이와 사는 지역에 따라 다릅니다. 주민센터나 시니어클럽에서 현재 모집 중인지 확인해야 합니다.",
       workCondition:
@@ -51,7 +63,9 @@ export function createVoiceAnswer(mode: VoiceMode, transcript: string): EasyJobS
         "나이, 사는 동네, 원하는 근무 시간을 말합니다.",
         "신분증을 가지고 방문해 신청서를 작성합니다.",
       ],
-      caution: "무거운 물건을 들거나 오래 서 있는 일은 건강 상태를 먼저 확인하세요.",
+      caution: healthLimit
+        ? `말씀하신 건강 상태는 ${healthLimit}입니다. 이 부분에 무리가 가지 않는지 꼭 확인하세요. 오래 서 있거나 무거운 물건을 드는 일은 피하는 것이 좋습니다.`
+        : "아픈 곳이나 피하고 싶은 일이 있으면 먼저 말해야 합니다. 무거운 물건을 들거나 오래 서 있는 일은 건강 상태를 확인하세요.",
     };
   }
 
