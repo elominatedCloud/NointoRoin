@@ -2,9 +2,12 @@ import Link from "next/link";
 
 const links = [
   { href: "/employer/profile", label: "기업 정보" },
-  { href: "/employer/jobs/new", label: "공고 등록" },
-  { href: "/employer/jobs", label: "공고 목록" },
-  { href: "/employer/applications", label: "추천 근로자" },
+  { href: "/employer/jobs", label: "공고" },
+  { href: "/employer/applications", label: "이력서" },
+  { href: "/employer/attendance", label: "출퇴근" },
+  { href: "/employer/policies", label: "정책" },
+  { href: "/employer/my", label: "마이" },
+  { href: "/employer/help", label: "AI 도움" },
 ];
 
 export function EmployerNav() {

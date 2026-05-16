@@ -1,12 +1,14 @@
 import { EmployerLayout } from "@/components/employer/EmployerLayout";
 import { listEmployerMatchCandidates } from "@/lib/db";
 
+export const dynamic = "force-dynamic";
+
 export default async function EmployerApplicationsPage() {
   const matches = await listEmployerMatchCandidates();
 
   return (
     <EmployerLayout
-      title="추천 근로자"
+      title="제출된 이력서 확인"
       description="내부 데모 프로필과 공고를 비교해 적합도가 높은 후보를 보여줍니다."
     >
       <div className="grid gap-4">

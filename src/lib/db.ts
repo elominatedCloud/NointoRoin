@@ -53,6 +53,20 @@ export async function listJobs() {
   return getStore().jobs.filter((job) => job.status !== "draft");
 }
 
+export async function listPublicJobs() {
+  return getStore()
+    .jobs.filter(
+      (job) => job.status !== "draft" && (job.source === "public_api" || job.source === "mock"),
+    )
+    .sort((a, b) => {
+      if (a.source !== b.source) {
+        return a.source === "public_api" ? -1 : 1;
+      }
+
+      return b.updatedAt.localeCompare(a.updatedAt);
+    });
+}
+
 export async function getJobById(id: string) {
   return getStore().jobs.find((job) => job.id === id || job.externalId === id) ?? null;
 }
@@ -167,6 +181,23 @@ export async function listEmployerJobs() {
   return getStore().jobs.filter((job) => job.source === "employer");
 }
 
+export async function getDemoStats() {
+  const store = getStore();
+  const employerJobs = store.jobs.filter((job) => job.source === "employer");
+  const publicJobs = store.jobs.filter(
+    (job) => job.source === "public_api" || job.source === "mock",
+  );
+  const matches = await listEmployerMatchCandidates();
+
+  return {
+    employerJobCount: employerJobs.length,
+    publicJobCount: publicJobs.length,
+    seniorProfileCount: store.seniorProfiles.length,
+    matchCount: matches.length,
+    publicApiConnected: publicJobs.some((job) => job.source === "public_api"),
+  };
+}
+
 export async function listEmployerMatchCandidates(): Promise<MatchCandidate[]> {
   const store = getStore();
   const targetJobs =
@@ -234,6 +265,7 @@ export async function upsertPublicJobs(incoming: Job[]) {
         createdAt: previous.createdAt,
         updatedAt: nowIso(),
       };
+      store.summaries = store.summaries.filter((summary) => summary.jobId !== previous.id);
       updated += 1;
       await ensureSummary(store.jobs[index]);
     } else {

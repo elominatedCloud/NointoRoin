@@ -3,6 +3,7 @@ export type EasyJobSummary = {
   title: string;
   organization?: string | null;
   workLocation?: string | null;
+  contactPhone?: string | null;
   summary: string;
   eligibility: string;
   workCondition: string;

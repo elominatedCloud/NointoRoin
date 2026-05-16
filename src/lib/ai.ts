@@ -9,8 +9,15 @@ const fallbackGuide = [
 ];
 
 export function generateEasyExplanation(job: Job): EasyJobSummary {
+  const contactPhone = extractPhone(job.applicationMethod);
+  const applicationGuide = buildApplicationGuide(job, contactPhone);
+
   return {
+    jobId: job.id,
     title: job.title || "일자리 안내",
+    organization: job.organization,
+    workLocation: job.workLocation,
+    contactPhone,
     summary:
       job.description ||
       "기관에서 필요한 일을 돕는 일자리입니다. 자세한 내용은 담당 기관에 확인해야 합니다.",
@@ -20,14 +27,7 @@ export function generateEasyExplanation(job: Job): EasyJobSummary {
     workCondition:
       [job.workTime, job.workLocation, job.pay].filter(Boolean).join(" / ") ||
       "근무 시간과 급여는 공고마다 다릅니다. 전화로 확인하는 것이 좋습니다.",
-    applicationGuide: job.applicationMethod
-      ? [
-          "공고의 연락처나 담당 기관에 전화합니다.",
-          job.applicationMethod,
-          "신분증과 필요한 서류를 준비합니다.",
-          "방문 전에 모집이 끝났는지 확인합니다.",
-        ]
-      : fallbackGuide,
+    applicationGuide,
     caution: "모집 기간과 실제 근무 강도는 바뀔 수 있으니 신청 전에 꼭 확인하세요.",
   };
 }
@@ -106,6 +106,7 @@ function createJobSpecificRecommendation(
     jobId: job.id,
     organization: job.organization,
     workLocation: job.workLocation,
+    contactPhone: extractPhone(job.applicationMethod),
     title: job.title,
     summary: `현재 추천 공고는 ${organizationText}${job.title}입니다. ${summary}`,
     eligibility: eligibility
@@ -114,16 +115,7 @@ function createJobSpecificRecommendation(
     workCondition: workFacts
       ? `이 공고의 근무 조건은 ${workFacts}입니다.${preferredTime ? ` 원하신 ${preferredTime}과 맞는지 전화로 확인하세요.` : ""}`
       : base.workCondition,
-    applicationGuide: job.applicationMethod
-      ? [
-          `${job.title} 공고 담당 기관에 연락합니다.`,
-          cleanText(job.applicationMethod),
-          job.requiredDocuments
-            ? `${cleanText(job.requiredDocuments)}을 준비합니다.`
-            : "신분증과 필요한 서류가 있는지 물어봅니다.",
-          "모집이 끝났는지 확인한 뒤 방문합니다.",
-        ]
-      : base.applicationGuide,
+    applicationGuide: buildApplicationGuide(job, base.contactPhone),
     caution: buildJobCaution(job, healthLimit),
   };
 }
@@ -244,6 +236,32 @@ function matchesAny(text: string, keywords: string[]) {
 
 function cleanText(value: string | null | undefined) {
   return (value ?? "").replace(/\s+/g, " ").trim();
+}
+
+function buildApplicationGuide(job: Job, contactPhone?: string | null) {
+  const method = cleanText(job.applicationMethod);
+  const docs = cleanText(job.requiredDocuments);
+  const organization = job.organization || job.sourceName || "담당 기관";
+  const guide = [
+    contactPhone
+      ? `${organization}에 전화합니다.`
+      : `${organization}의 신청 방법과 접수 장소를 확인합니다.`,
+  ];
+
+  if (method) {
+    guide.push(`공고에 적힌 신청 방법은 ${method}입니다.`);
+  }
+
+  guide.push(docs ? `${docs}을 준비합니다.` : "신분증과 필요한 서류가 있는지 확인합니다.");
+  guide.push("모집이 끝났는지 확인한 뒤 신청합니다.");
+
+  return guide.length > 0 ? guide : fallbackGuide;
+}
+
+function extractPhone(value: string | null | undefined) {
+  const text = value ?? "";
+  const match = text.match(/0\d{1,2}[-.\s]?\d{3,4}[-.\s]?\d{4}/);
+  return match?.[0].replace(/[.\s]/g, "-") ?? null;
 }
 
 export function createRecommendation(): RecommendationResponse {

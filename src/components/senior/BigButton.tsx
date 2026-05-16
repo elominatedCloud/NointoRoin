@@ -30,6 +30,14 @@ export function BigButton({
   const className = `${baseClass} ${variants[variant]}`;
 
   if (href) {
+    if (/^(tel:|mailto:|https?:\/\/)/.test(href)) {
+      return (
+        <a className={className} href={href}>
+          {children}
+        </a>
+      );
+    }
+
     return (
       <Link className={className} href={href}>
         {children}
