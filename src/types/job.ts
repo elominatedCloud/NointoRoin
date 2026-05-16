@@ -88,3 +88,17 @@ export type SyncStats = {
   updated: number;
   skipped: number;
 };
+
+export type MatchCandidate = {
+  id: string;
+  jobId: string;
+  jobTitle: string;
+  seekerId: string;
+  seekerName: string;
+  phone: string | null;
+  score: number;
+  fitSummary: string;
+  caution: string;
+  profileSummary: string;
+  matchedAt: string;
+};

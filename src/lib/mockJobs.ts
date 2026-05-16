@@ -1,4 +1,5 @@
 import type { Application, Job, JobAISummary } from "@/types/job";
+import type { DemoSeniorProfile } from "@/types/user";
 
 const baseDate = "2026-05-16T00:00:00.000Z";
 
@@ -131,6 +132,54 @@ export const mockApplications: Application[] = [
     phone: "010-2222-3333",
     resumeSummary: "마트 근무 경험이 있고 가까운 거리 근무를 원합니다.",
     status: "reviewed",
+    createdAt: baseDate,
+    updatedAt: baseDate,
+  },
+];
+
+export const mockSeniorProfiles: DemoSeniorProfile[] = [
+  {
+    id: "senior_001",
+    userId: "user_senior_001",
+    name: "김영자",
+    phone: "010-1234-5678",
+    ageRange: "60대",
+    region: "서울 중구",
+    previousWork: "사람을 안내하거나 손님을 응대한 경험",
+    preferredTime: "오전 짧은 시간",
+    healthLimit: "허리나 무릎이 불편함",
+    preferredJobType: "안내 도우미",
+    consentToEmployerMatching: true,
+    createdAt: baseDate,
+    updatedAt: baseDate,
+  },
+  {
+    id: "senior_002",
+    userId: "user_senior_002",
+    name: "박성호",
+    phone: "010-2222-3333",
+    ageRange: "50대",
+    region: "부산 해운대구",
+    previousWork: "청소, 정리, 물건 관리 경험",
+    preferredTime: "오후 짧은 시간",
+    healthLimit: "특별히 아픈 곳 없음",
+    preferredJobType: "정리 보조",
+    consentToEmployerMatching: true,
+    createdAt: baseDate,
+    updatedAt: baseDate,
+  },
+  {
+    id: "senior_003",
+    userId: "user_senior_003",
+    name: "이정순",
+    phone: null,
+    ageRange: "60대",
+    region: "경기 고양시",
+    previousWork: "청소, 정리, 물건 관리 경험",
+    preferredTime: "오전 짧은 시간",
+    healthLimit: "손이나 어깨가 불편하거나 무거운 물건을 피해야 함",
+    preferredJobType: "가벼운 정리",
+    consentToEmployerMatching: true,
     createdAt: baseDate,
     updatedAt: baseDate,
   },

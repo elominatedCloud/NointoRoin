@@ -33,6 +33,16 @@ npm run dev
 - `/employer/profile`
 - `/employer/jobs/new`
 - `/employer/jobs`
+- `/employer/applications`
+
+## 데모 데이터 구조
+
+현재 MVP는 실제 DB 없이 서버 in-memory store를 내부 DB처럼 사용합니다.
+
+- 노인용 추천 선택 흐름을 완료하면 `/api/senior/profile`에 데모 구직자 프로필이 저장됩니다.
+- 기업용 추천 근로자 화면은 `/api/employer/matches`에서 공고와 구직자 프로필을 비교한 적합도와 사유를 보여줍니다.
+- 공공 일자리 수집은 `/api/cron/sync-public-jobs`에서 실제 공공 API를 호출하고, 결과를 내부 store에 저장합니다.
+- Vercel 배포나 서버 재시작 후 데이터 유지를 원하면 `DATABASE_URL` 기반 Postgres 저장소로 교체해야 합니다.
 
 ## API
 
@@ -41,6 +51,9 @@ npm run dev
 - `POST /api/ai/recommend`
 - `GET /api/jobs`
 - `GET /api/jobs/:id`
+- `GET /api/senior/profile`
+- `POST /api/senior/profile`
+- `GET /api/employer/matches`
 - `GET /api/cron/sync-public-jobs`
 
 Cron route는 아래 헤더가 필요합니다.

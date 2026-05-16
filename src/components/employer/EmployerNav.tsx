@@ -4,7 +4,7 @@ const links = [
   { href: "/employer/profile", label: "기업 정보" },
   { href: "/employer/jobs/new", label: "공고 등록" },
   { href: "/employer/jobs", label: "공고 목록" },
-  { href: "/employer/applications", label: "지원자" },
+  { href: "/employer/applications", label: "추천 근로자" },
 ];
 
 export function EmployerNav() {

@@ -23,3 +23,19 @@ export type JobSeekerProfile = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type DemoSeniorProfile = {
+  id: string;
+  userId: string;
+  name: string;
+  phone: string | null;
+  ageRange: string;
+  region: string;
+  previousWork: string;
+  preferredTime: string;
+  healthLimit: string;
+  preferredJobType: string | null;
+  consentToEmployerMatching: boolean;
+  createdAt: string;
+  updatedAt: string;
+};

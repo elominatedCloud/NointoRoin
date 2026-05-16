@@ -222,6 +222,32 @@ export function VoiceClient() {
     }
 
     setIsSubmittingRecommendation(true);
+    const savedProfileResponse = await fetch("/api/senior/profile", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        previousWork: nextAnswers.previousWork,
+        healthLimit: nextAnswers.healthLimit,
+        preferredTime: nextAnswers.preferredTime,
+        preferredJobType: currentStep.id === "time" ? "추천 일자리" : null,
+        consentToEmployerMatching: true,
+      }),
+    });
+
+    if (savedProfileResponse.ok) {
+      const profilePayload = (await savedProfileResponse.json()) as {
+        profile?: {
+          id: string;
+          name: string;
+        };
+      };
+      if (profilePayload.profile) {
+        sessionStorage.setItem("senior-profile", JSON.stringify(profilePayload.profile));
+      }
+    }
+
     const response = await fetch("/api/ai/voice-job-helper", {
       method: "POST",
       headers: {
