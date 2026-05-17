@@ -11,7 +11,7 @@ import { ResultCard } from "@/components/senior/ResultCard";
 import { SeniorLayout } from "@/components/senior/SeniorLayout";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import type { EasyJobSummary } from "@/types/ai";
-import { Bookmark, BookmarkCheck, ClipboardList, Phone, Volume2 } from "lucide-react";
+import { Bookmark, BookmarkCheck, ClipboardList, Phone, Volume2, VolumeX } from "lucide-react";
 
 const fallbackResult: EasyJobSummary = {
   title: "신청 가능한 일자리 안내",
@@ -60,13 +60,13 @@ export function ResultClient({ initialResult }: ResultClientProps) {
 
     return localStorage.getItem(storageKey) === "1";
   });
-  const { speak, isSpeaking } = useTextToSpeech();
+  const { cancel, error, isEnabled, isSpeaking, isSupported, speak } = useTextToSpeech();
   const fullText = useMemo(() => makeReadableText(result), [result]);
   const guideText = useMemo(() => makeApplicationGuideText(result), [result]);
   const phoneHref = result.contactPhone ? `tel:${result.contactPhone.replace(/-/g, "")}` : "";
 
   useEffect(() => {
-    speak(fullText);
+    speak(fullText, { auto: true });
   }, [fullText, speak]);
 
   function toggleSaved() {
@@ -98,6 +98,26 @@ export function ResultClient({ initialResult }: ResultClientProps) {
           </p>
         ) : null}
       </section>
+      {!isEnabled ? (
+        <button
+          className="mt-5 flex min-h-[72px] w-full items-center justify-center gap-3 rounded-[22px] bg-[#1f6f4a] px-6 text-[22px] font-black text-white shadow-lg shadow-emerald-900/15"
+          onClick={() => speak(fullText)}
+          type="button"
+        >
+          <Volume2 aria-hidden="true" size={28} strokeWidth={3} />
+          음성 안내 시작
+        </button>
+      ) : null}
+      {isSupported && error ? (
+        <p className="mt-3 rounded-2xl bg-[#fff7e8] px-4 py-3 text-[17px] font-bold leading-relaxed text-[#93430d]">
+          {error}
+        </p>
+      ) : null}
+      {!isSupported ? (
+        <p className="mt-3 rounded-2xl bg-[#fff7e8] px-4 py-3 text-[17px] font-bold leading-relaxed text-[#93430d]">
+          이 브라우저에서는 음성 안내를 지원하지 않습니다.
+        </p>
+      ) : null}
       {isApplying ? (
         <section className="mt-5 rounded-[28px] bg-white px-6 py-6 shadow-xl shadow-emerald-950/10">
           <h2 className="text-[28px] font-black leading-tight">신청하려면</h2>
@@ -147,6 +167,14 @@ export function ResultClient({ initialResult }: ResultClientProps) {
               {isSpeaking ? "읽는 중입니다" : "설명 다시 듣기"}
             </span>
           </BigButton>
+          {isSpeaking ? (
+            <BigButton onClick={cancel} variant="secondary">
+              <span className="flex items-center gap-3">
+                <VolumeX aria-hidden="true" size={28} strokeWidth={3} />
+                음성 멈추기
+              </span>
+            </BigButton>
+          ) : null}
           <button
             className="flex min-h-[68px] w-full items-center justify-center gap-3 rounded-[22px] bg-white px-6 text-[21px] font-black text-[#1f6f4a] shadow-md shadow-emerald-950/10"
             onClick={toggleSaved}

@@ -119,7 +119,7 @@ export function VoiceClient() {
   const searchParams = useSearchParams();
   const mode = (searchParams.get("mode") === "recommend" ? "recommend" : "ask") satisfies VoiceMode;
   const { status, transcript, startListening } = useSpeechInput();
-  const { speak } = useTextToSpeech();
+  const { error, enable, isEnabled, isSpeaking, isSupported, speak } = useTextToSpeech();
   const [stepId, setStepId] = useState<RecommendStepId>("work");
   const [previousWork, setPreviousWork] = useState("");
   const [healthLimit, setHealthLimit] = useState("");
@@ -167,7 +167,7 @@ export function VoiceClient() {
 
   useEffect(() => {
     if (isRecommendMode) {
-      speak(stepSpeech);
+      speak(stepSpeech, { auto: true });
     }
   }, [isRecommendMode, speak, stepSpeech]);
 
@@ -195,6 +195,8 @@ export function VoiceClient() {
     if (isSubmittingRecommendation) {
       return;
     }
+
+    enable();
 
     const nextAnswers = {
       previousWork,
@@ -304,6 +306,26 @@ export function VoiceClient() {
           <p className="mt-3 text-[19px] font-bold leading-relaxed text-[#526157]">
             버튼을 누르거나 키보드 숫자 1, 2를 눌러도 됩니다.
           </p>
+          {!isEnabled ? (
+            <button
+              className="mt-6 flex min-h-[68px] w-full items-center justify-center gap-2 rounded-[20px] bg-[#1f6f4a] text-[21px] font-black text-white"
+              onClick={() => speak(stepSpeech)}
+              type="button"
+            >
+              <Volume2 aria-hidden="true" size={26} strokeWidth={3} />
+              음성 안내 시작
+            </button>
+          ) : null}
+          {isSupported && error ? (
+            <p className="mt-4 rounded-2xl bg-[#fff7e8] px-4 py-3 text-[17px] font-bold leading-relaxed text-[#93430d]">
+              {error}
+            </p>
+          ) : null}
+          {!isSupported ? (
+            <p className="mt-4 rounded-2xl bg-[#fff7e8] px-4 py-3 text-[17px] font-bold leading-relaxed text-[#93430d]">
+              이 브라우저에서는 음성 안내를 지원하지 않습니다.
+            </p>
+          ) : null}
 
           <div className="mt-7 grid gap-4">
             {currentStep.choices.map((choice) => (
@@ -329,7 +351,7 @@ export function VoiceClient() {
             type="button"
           >
             <Volume2 aria-hidden="true" size={26} strokeWidth={3} />
-            질문 다시 듣기
+            {isSpeaking ? "읽는 중입니다" : "질문 다시 듣기"}
           </button>
           {isSubmittingRecommendation ? (
             <p className="mt-5 flex items-center justify-center gap-2 text-[20px] font-black text-[#1f6f4a]">
