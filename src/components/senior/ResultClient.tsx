@@ -11,7 +11,7 @@ import { ResultCard } from "@/components/senior/ResultCard";
 import { SeniorLayout } from "@/components/senior/SeniorLayout";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import type { EasyJobSummary } from "@/types/ai";
-import { Phone, Volume2 } from "lucide-react";
+import { Bookmark, BookmarkCheck, ClipboardList, Phone, Volume2 } from "lucide-react";
 
 const fallbackResult: EasyJobSummary = {
   title: "신청 가능한 일자리 안내",
@@ -52,6 +52,14 @@ export function ResultClient({ initialResult }: ResultClientProps) {
       return fallbackResult;
     }
   });
+  const storageKey = `saved-job:${result.jobId ?? result.title}`;
+  const [isSaved, setIsSaved] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    return localStorage.getItem(storageKey) === "1";
+  });
   const { speak, isSpeaking } = useTextToSpeech();
   const fullText = useMemo(() => makeReadableText(result), [result]);
   const guideText = useMemo(() => makeApplicationGuideText(result), [result]);
@@ -60,6 +68,23 @@ export function ResultClient({ initialResult }: ResultClientProps) {
   useEffect(() => {
     speak(fullText);
   }, [fullText, speak]);
+
+  function toggleSaved() {
+    setIsSaved((current) => {
+      const next = !current;
+      if (typeof window !== "undefined") {
+        if (next) {
+          localStorage.setItem(storageKey, "1");
+          localStorage.setItem(storageKey + ":title", result.title);
+        } else {
+          localStorage.removeItem(storageKey);
+          localStorage.removeItem(storageKey + ":title");
+        }
+      }
+
+      return next;
+    });
+  }
 
   return (
     <SeniorLayout showHomeLink>
@@ -107,12 +132,6 @@ export function ResultClient({ initialResult }: ResultClientProps) {
         </section>
       ) : (
         <div className="mt-5 grid gap-5">
-          <BigButton onClick={() => speak(fullText)} variant="quiet">
-            <span className="flex items-center gap-3">
-              <Volume2 aria-hidden="true" size={28} strokeWidth={3} />
-              {isSpeaking ? "읽는 중입니다" : "설명 다시 듣기"}
-            </span>
-          </BigButton>
           <BigButton
             onClick={() => {
               setIsApplying(true);
@@ -122,8 +141,41 @@ export function ResultClient({ initialResult }: ResultClientProps) {
           >
             신청하기
           </BigButton>
+          <BigButton onClick={() => speak(fullText)} variant="quiet">
+            <span className="flex items-center gap-3">
+              <Volume2 aria-hidden="true" size={28} strokeWidth={3} />
+              {isSpeaking ? "읽는 중입니다" : "설명 다시 듣기"}
+            </span>
+          </BigButton>
+          <button
+            className="flex min-h-[68px] w-full items-center justify-center gap-3 rounded-[22px] bg-white px-6 text-[21px] font-black text-[#1f6f4a] shadow-md shadow-emerald-950/10"
+            onClick={toggleSaved}
+            type="button"
+          >
+            {isSaved ? (
+              <BookmarkCheck aria-hidden="true" size={28} strokeWidth={3} />
+            ) : (
+              <Bookmark aria-hidden="true" size={28} strokeWidth={3} />
+            )}
+            {isSaved ? "저장한 공고입니다" : "이 공고 저장하기"}
+          </button>
         </div>
       )}
+
+      <section className="mt-5 rounded-[24px] bg-[#fff7e8] p-5 shadow-md shadow-emerald-950/5">
+        <p className="flex items-center gap-2 text-[20px] font-black text-[#93430d]">
+          <ClipboardList aria-hidden="true" size={25} strokeWidth={3} />
+          신청 전 준비
+        </p>
+        <ul className="mt-3 grid gap-2 text-[19px] font-bold leading-relaxed text-[#4b3a22]">
+          <li>신분증을 준비하세요.</li>
+          <li>통장 사본이나 복지카드는 필요할 때만 챙기세요.</li>
+          <li>방문 전 모집이 끝났는지 확인하세요.</li>
+        </ul>
+      </section>
+      <p className="mt-3 rounded-2xl bg-white px-4 py-3 text-[17px] font-bold leading-relaxed text-[#526157] shadow-sm shadow-emerald-950/5">
+        공고 저장은 이 기기 안에만 남는 데모 기능입니다.
+      </p>
       <div className="mt-6">
         <ResultCard result={result} />
       </div>
