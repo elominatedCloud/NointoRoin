@@ -1,8 +1,17 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable.css");
 @import "tailwindcss";
 
 :root {
-  --background: #f7fbf4;
-  --foreground: #17211b;
+    --background: #F4FFFC;
+    --foreground: #17211b;
+
+    --brand: #3ACBA7;
+    --brand-dark: #3ACBA7;
+    --brand-light: #E8FBF6;
+    --brand-bg: #F4FFFC;
+    --brand-border: #BDEFE4;
+    --brand-orange: #ff8a3d;
+    --text-muted: #526157;
 }
 
 * {
@@ -19,10 +28,12 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family:
-    Arial,
-    "Apple SD Gothic Neo",
-    "Noto Sans KR",
-    sans-serif;
+          "Pretendard Variable",
+          Pretendard,
+          "Apple SD Gothic Neo",
+          "Noto Sans KR",
+          Arial,
+          sans-serif;
 }
 
 button,

@@ -9,22 +9,32 @@ type EmployerLayoutProps = {
 
 export function EmployerLayout({ title, description, children }: EmployerLayoutProps) {
   return (
-    <main className="h-dvh overflow-hidden bg-slate-50 text-slate-950">
-      <div className="h-full overflow-y-auto px-5 pb-[calc(104px+env(safe-area-inset-bottom))] pt-8 md:pb-8">
-        <div className="mx-auto max-w-5xl">
-        <header className="mb-8 flex flex-col gap-5 border-b border-slate-200 pb-6 md:flex-row md:items-end md:justify-between">
-          <div>
-            <Link className="text-sm font-black text-emerald-800" href="/employer">
-              기업용 일자리 관리
-            </Link>
-            <h1 className="mt-2 text-3xl font-black tracking-tight md:text-4xl">{title}</h1>
-            {description ? <p className="mt-3 max-w-2xl text-lg leading-relaxed text-slate-700">{description}</p> : null}
+      <main className="h-dvh overflow-hidden bg-[#F4FFFC] text-slate-950">
+        <div className="h-full overflow-y-auto px-5 pb-[calc(104px+env(safe-area-inset-bottom))] pt-8 md:pb-8">
+          <div className="mx-auto max-w-5xl">
+            <header className="mb-8 flex flex-col gap-5 border-b border-[#BDEFE4] pb-6 md:flex-row md:items-end md:justify-between">
+              <div>
+                <Link className="text-sm font-black text-[#3ACBA7]" href="/employer">
+                  기업용 일자리 관리
+                </Link>
+
+                <h1 className="mt-2 text-3xl font-black tracking-tight md:text-4xl">
+                  {title}
+                </h1>
+
+                {description ? (
+                    <p className="mt-3 max-w-2xl text-lg leading-relaxed text-slate-700">
+                      {description}
+                    </p>
+                ) : null}
+              </div>
+
+              <EmployerNav />
+            </header>
+
+            {children}
           </div>
-          <EmployerNav />
-        </header>
-        {children}
         </div>
-      </div>
-    </main>
+      </main>
   );
 }

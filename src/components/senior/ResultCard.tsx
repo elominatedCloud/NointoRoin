@@ -21,8 +21,8 @@ export function ResultCard({ result }: ResultCardProps) {
         <p className="mt-4 text-[22px] font-bold leading-relaxed">{result.eligibility}</p>
       </section>
 
-      <section className="mt-7 rounded-[20px] bg-[#eef8ed] p-4">
-        <h2 className="text-[24px] font-black text-[#1f6f4a]">근무 조건</h2>
+      <section className="mt-7 rounded-[20px] bg-[#E8FBF6] p-4">
+        <h2 className="text-[24px] font-black text-[#238B73]">근무 조건</h2>
         <p className="mt-3 text-[21px] font-bold leading-relaxed">{result.workCondition}</p>
       </section>
 

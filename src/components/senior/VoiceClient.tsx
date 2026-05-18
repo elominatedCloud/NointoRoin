@@ -282,21 +282,21 @@ export function VoiceClient() {
   if (isRecommendMode) {
     return (
       <SeniorLayout>
-        <Link className="inline-flex items-center gap-2 text-[19px] font-black text-[#1f6f4a]" href="/senior">
+        <Link className="inline-flex items-center gap-2 text-[19px] font-black text-[#3ACBA7]" href="/senior">
           <ArrowLeft aria-hidden="true" size={24} strokeWidth={3} />
           처음으로
         </Link>
 
         <section className="mt-5 rounded-[32px] bg-white px-6 py-7 shadow-xl shadow-emerald-950/10">
           <div className="flex items-center justify-between gap-4">
-            <p className="text-[20px] font-black text-[#1f6f4a]">내 조건 상담</p>
-            <p className="rounded-full bg-[#eaf4ea] px-4 py-2 text-[18px] font-black text-[#1f6f4a]">
+            <p className="text-[20px] font-black text-[#3ACBA7]">내 조건 상담</p>
+            <p className="rounded-full bg-[#E8FBF6] px-4 py-2 text-[18px] font-black text-[#3ACBA7]">
               {currentStepNumber}/{totalStepCount}
             </p>
           </div>
           <div className="mt-5 h-3 rounded-full bg-[#e3ede4]">
             <div
-              className="h-3 rounded-full bg-[#1f6f4a] transition-all"
+              className="h-3 rounded-full bg-[#3ACBA7] transition-all"
               style={{ width: `${Math.round((currentStepNumber / totalStepCount) * 100)}%` }}
             />
           </div>
@@ -308,7 +308,7 @@ export function VoiceClient() {
           </p>
           {!isEnabled ? (
             <button
-              className="mt-6 flex min-h-[68px] w-full items-center justify-center gap-2 rounded-[20px] bg-[#1f6f4a] text-[21px] font-black text-white"
+              className="mt-6 flex min-h-[68px] w-full items-center justify-center gap-2 rounded-[20px] bg-[#3ACBA7] text-[21px] font-black text-white shadow-lg shadow-[#3ACBA7]/20 transition duration-200 hover:bg-[#2FB894] active:scale-[0.98]"
               onClick={() => speak(stepSpeech)}
               type="button"
             >
@@ -330,13 +330,13 @@ export function VoiceClient() {
           <div className="mt-7 grid gap-4">
             {currentStep.choices.map((choice) => (
               <button
-                className="grid min-h-[92px] grid-cols-[56px_1fr] items-center gap-4 rounded-[24px] border-2 border-[#dbe8dc] bg-white p-4 text-left shadow-md shadow-emerald-950/5 transition active:scale-[0.99] disabled:opacity-60"
+                className="grid min-h-[92px] grid-cols-[56px_1fr] items-center gap-4 rounded-[24px] border-2 border-[#BDEFE4] bg-white p-4 text-left shadow-md shadow-[#3ACBA7]/10 transition duration-200 hover:border-[#3ACBA7] hover:bg-[#F4FFFC] active:scale-[0.99] disabled:opacity-60"
                 disabled={isSubmittingRecommendation}
                 key={choice.label}
                 onClick={() => void handleRecommendChoice(choice)}
                 type="button"
               >
-                <span className="flex size-14 items-center justify-center rounded-2xl bg-[#1f6f4a] text-[25px] font-black text-white">
+                <span className="flex size-14 items-center justify-center rounded-2xl bg-[#3ACBA7] text-[25px] font-black text-white">
                   {choice.label.slice(0, 2).replace("번", "")}
                 </span>
                 <span className="text-[24px] font-black leading-tight">
@@ -346,7 +346,7 @@ export function VoiceClient() {
             ))}
           </div>
           <button
-            className="mt-6 flex min-h-[64px] w-full items-center justify-center gap-2 rounded-[20px] bg-[#eaf4ea] text-[21px] font-black text-[#1f6f4a]"
+            className="mt-6 flex min-h-[64px] w-full items-center justify-center gap-2 rounded-[20px] bg-[#E8FBF6] text-[21px] font-black text-[#3ACBA7] transition duration-200 hover:bg-[#D9F8F1] active:scale-[0.98]"
             onClick={() => speak(stepSpeech)}
             type="button"
           >
@@ -354,7 +354,7 @@ export function VoiceClient() {
             {isSpeaking ? "읽는 중입니다" : "질문 다시 듣기"}
           </button>
           {isSubmittingRecommendation ? (
-            <p className="mt-5 flex items-center justify-center gap-2 text-[20px] font-black text-[#1f6f4a]">
+            <p className="mt-5 flex items-center justify-center gap-2 text-[20px] font-black text-[#3ACBA7]">
               <CheckCircle2 aria-hidden="true" size={24} strokeWidth={3} />
               맞는 공고를 찾고 있습니다
             </p>
@@ -366,7 +366,7 @@ export function VoiceClient() {
 
   return (
       <SeniorLayout>
-      <Link className="inline-flex items-center gap-2 text-[19px] font-black text-[#1f6f4a]" href="/senior">
+      <Link className="inline-flex items-center gap-2 text-[19px] font-black text-[#3ACBA7]" href="/senior">
         <ArrowLeft aria-hidden="true" size={24} strokeWidth={3} />
         처음으로
       </Link>
@@ -382,13 +382,13 @@ export function VoiceClient() {
         </p>
 
         <div className="my-8 flex justify-center">
-          <div className="flex h-32 w-32 items-center justify-center rounded-full bg-[#fff3df] text-[#f36b21]">
+          <div className="flex h-32 w-32 items-center justify-center rounded-full bg-[#D3FCF6] text-[#3ACBA7]">
             <Mic aria-hidden="true" size={56} strokeWidth={3} />
           </div>
         </div>
         <p className="text-center text-[24px] font-black">현재 상태: {statusText[status]}</p>
         {transcript ? (
-          <p className="mt-4 rounded-2xl bg-[#eef8ed] p-4 text-[22px] font-bold leading-relaxed">
+          <p className="mt-4 rounded-2xl bg-[#E8FBF6] p-4 text-[22px] font-bold leading-relaxed">
             {transcript}
           </p>
         ) : null}

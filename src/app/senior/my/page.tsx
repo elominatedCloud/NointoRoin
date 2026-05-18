@@ -26,7 +26,7 @@ export default function SeniorMyPage() {
       </div>
 
       <Link
-        className="mt-6 flex min-h-[68px] w-full items-center justify-center rounded-2xl border-2 border-[#1f6f4a] bg-white px-6 text-center text-[22px] font-black text-[#1f6f4a]"
+        className="mt-6 flex min-h-[68px] w-full items-center justify-center rounded-2xl border-2 border-[#3ACBA7] bg-white px-6 text-center text-[22px] font-black text-[#3ACBA7] hover:bg-[#3ACBA7] hover:text-[white]"
         href="/"
       >
         시작 화면으로

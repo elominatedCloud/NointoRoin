@@ -22,7 +22,7 @@ export default async function SeniorResumePage() {
       </header>
 
       <section className="mt-7 rounded-[24px] bg-white p-5 shadow-lg shadow-emerald-950/10">
-        <p className="text-[19px] font-black text-[#1f6f4a]">AI 변환 이력</p>
+        <p className="text-[19px] font-black text-[#238B73]">AI 변환 이력</p>
         <h2 className="mt-2 text-[27px] font-black">{profile?.name ?? "김영자"} 님</h2>
         <dl className="mt-5 grid gap-4 text-[20px] font-bold leading-relaxed">
           <div>
@@ -45,7 +45,7 @@ export default async function SeniorResumePage() {
       </section>
 
       <Link
-        className="mt-6 flex min-h-[68px] w-full items-center justify-center rounded-2xl bg-[#1f6f4a] px-6 text-center text-[22px] font-black text-white"
+        className="mt-6 flex min-h-[68px] w-full items-center justify-center rounded-2xl bg-[#238B73] px-6 text-center text-[22px] font-black text-white"
         href="/senior/voice?mode=recommend"
       >
         내 정보 다시 말하기

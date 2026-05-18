@@ -22,7 +22,7 @@ export default function SeniorAttendancePage() {
       </header>
 
       <section className="mt-7 rounded-[24px] bg-white p-5 shadow-lg shadow-emerald-950/10">
-        <p className="text-[19px] font-black text-[#1f6f4a]">2026년 5월</p>
+        <p className="text-[19px] font-black text-[#238B73]">2026년 5월</p>
         <p className="mt-2 text-[30px] font-black">2일 출근 완료</p>
         <p className="mt-2 text-[21px] font-bold leading-relaxed">예상 일급 합계 76,000원</p>
       </section>
@@ -35,14 +35,14 @@ export default function SeniorAttendancePage() {
                 <h2 className="text-[23px] font-black">{item.day}</h2>
                 <p className="mt-1 text-[19px] font-bold text-[#526157]">{item.status}</p>
               </div>
-              <p className="text-right text-[20px] font-black text-[#1f6f4a]">{item.pay}</p>
+              <p className="text-right text-[20px] font-black text-[#238B73]">{item.pay}</p>
             </div>
           </article>
         ))}
       </div>
 
       <Link
-        className="mt-6 flex min-h-[68px] w-full items-center justify-center rounded-2xl bg-[#1f6f4a] px-6 text-center text-[22px] font-black text-white"
+        className="mt-6 flex min-h-[68px] w-full items-center justify-center rounded-2xl bg-[#238B73] px-6 text-center text-[22px] font-black text-white"
         href="/senior/voice?mode=ask"
       >
         출근 관련 질문하기

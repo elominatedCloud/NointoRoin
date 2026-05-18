@@ -90,7 +90,7 @@ export function ResultClient({ initialResult }: ResultClientProps) {
     <SeniorLayout showHomeLink>
       <ReadAloudText result={result} />
       <section className="rounded-[28px] bg-white p-5 shadow-lg shadow-emerald-950/10">
-        <p className="text-[20px] font-black text-[#1f6f4a]">현재 공고</p>
+        <p className="text-[20px] font-black text-[#3ACBA7]">현재 공고</p>
         <h1 className="mt-2 text-[28px] font-black leading-tight">{result.title}</h1>
         {result.organization || result.workLocation ? (
           <p className="mt-3 text-[20px] font-bold leading-snug text-[#526157]">
@@ -100,7 +100,7 @@ export function ResultClient({ initialResult }: ResultClientProps) {
       </section>
       {!isEnabled ? (
         <button
-          className="mt-5 flex min-h-[72px] w-full items-center justify-center gap-3 rounded-[22px] bg-[#1f6f4a] px-6 text-[22px] font-black text-white shadow-lg shadow-emerald-900/15"
+          className="mt-5 flex min-h-[72px] w-full items-center justify-center gap-3 rounded-[22px] bg-[#3ACBA7] px-6 text-[22px] font-black text-white shadow-lg shadow-[#3ACBA7]/20 transition duration-200 hover:bg-[#2FB894] active:scale-[0.98]"
           onClick={() => speak(fullText)}
           type="button"
         >
@@ -124,7 +124,7 @@ export function ResultClient({ initialResult }: ResultClientProps) {
           <ol className="mt-5 grid gap-4">
             {result.applicationGuide.map((step, index) => (
               <li className="grid grid-cols-[42px_1fr] gap-3 text-[21px] font-bold leading-relaxed" key={step}>
-                <span className="flex size-[42px] items-center justify-center rounded-full bg-[#1f6f4a] text-[18px] font-black text-white">
+                <span className="flex size-[42px] items-center justify-center rounded-full bg-[#3ACBA7] text-[18px] font-black text-white">
                   {index + 1}
                 </span>
                 <span>{step}</span>
@@ -176,7 +176,7 @@ export function ResultClient({ initialResult }: ResultClientProps) {
             </BigButton>
           ) : null}
           <button
-            className="flex min-h-[68px] w-full items-center justify-center gap-3 rounded-[22px] bg-white px-6 text-[21px] font-black text-[#1f6f4a] shadow-md shadow-emerald-950/10"
+            className="flex min-h-[68px] w-full items-center justify-center gap-3 rounded-[22px] bg-white px-6 text-[21px] font-black text-[#3ACBA7] shadow-md shadow-[#3ACBA7]/10 transition duration-200 hover:bg-[#E8FBF6] active:scale-[0.98]"
             onClick={toggleSaved}
             type="button"
           >

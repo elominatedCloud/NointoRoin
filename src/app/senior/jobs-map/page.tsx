@@ -27,7 +27,7 @@ export default async function SeniorJobsMapPage() {
             href={`/senior/public-jobs/${encodeURIComponent(job.id)}`}
             key={job.id}
           >
-            <p className="text-[18px] font-black text-[#1f6f4a]">
+            <p className="text-[18px] font-black text-[#238B73]">
               {job.region || job.workLocation || "지역 확인 필요"}
             </p>
             <h2 className="mt-2 text-[23px] font-black leading-tight">{job.title}</h2>
