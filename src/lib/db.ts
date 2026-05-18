@@ -1,4 +1,4 @@
-import { generateEasyExplanation } from "@/lib/ai";
+import { generateEasyExplanation, generateEasyExplanationWithAi } from "@/lib/ai";
 import { mockApplications, mockJobs, mockSeniorProfiles, mockSummaries } from "@/lib/mockJobs";
 import type {
   Application,
@@ -75,13 +75,15 @@ export async function getSummaryByJobId(jobId: string) {
   return getStore().summaries.find((summary) => summary.jobId === jobId) ?? null;
 }
 
-export async function ensureSummary(job: Job) {
+export async function ensureSummary(job: Job, options: { useAi?: boolean } = {}) {
   const existing = await getSummaryByJobId(job.id);
   if (existing) {
     return existing;
   }
 
-  const generated = generateEasyExplanation(job);
+  const generated = options.useAi
+    ? await generateEasyExplanationWithAi(job)
+    : generateEasyExplanation(job);
   const now = nowIso();
   const summary: JobAISummary = {
     id: makeId("summary"),

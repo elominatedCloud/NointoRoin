@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { createVoiceAnswer } from "@/lib/ai";
+import { createVoiceAnswerWithAi } from "@/lib/ai";
 import { listJobs } from "@/lib/db";
 import type { VoiceMode } from "@/types/ai";
 
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
 
   return NextResponse.json({
     ok: true,
-    result: createVoiceAnswer(mode, transcript, {
+    result: await createVoiceAnswerWithAi(mode, transcript, {
       previousWork,
       healthLimit,
       preferredTime,

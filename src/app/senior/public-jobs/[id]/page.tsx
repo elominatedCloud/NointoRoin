@@ -20,7 +20,7 @@ export default async function SeniorPublicJobDetailPage({
     notFound();
   }
 
-  const summary = await ensureSummary(job);
+  const summary = await ensureSummary(job, { useAi: true });
 
   return <ResultClient initialResult={summary} />;
 }

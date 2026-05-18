@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
-import { createRecommendation } from "@/lib/ai";
+import { createRecommendationWithAi } from "@/lib/ai";
+import { listJobs } from "@/lib/db";
 
 export async function POST() {
-  return NextResponse.json(createRecommendation());
+  const jobs = await listJobs();
+  return NextResponse.json(await createRecommendationWithAi(jobs));
 }

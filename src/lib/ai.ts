@@ -1,5 +1,10 @@
 import type { EasyJobSummary, RecommendationResponse, VoiceMode } from "@/types/ai";
 import type { Job } from "@/types/job";
+import {
+  generateEasyExplanationWithGemini,
+  generateRecommendationsWithGemini,
+  generateVoiceAnswerWithGemini,
+} from "@/lib/gemini";
 
 const fallbackGuide = [
   "가까운 주민센터나 기관에 전화합니다.",
@@ -30,6 +35,11 @@ export function generateEasyExplanation(job: Job): EasyJobSummary {
     applicationGuide,
     caution: "모집 기간과 실제 근무 강도는 바뀔 수 있으니 신청 전에 꼭 확인하세요.",
   };
+}
+
+export async function generateEasyExplanationWithAi(job: Job): Promise<EasyJobSummary> {
+  const fallback = generateEasyExplanation(job);
+  return (await generateEasyExplanationWithGemini(job, fallback)) ?? fallback;
 }
 
 type VoiceAnswerContext = {
@@ -87,6 +97,25 @@ export function createVoiceAnswer(
     ],
     caution: "지역마다 모집 기간이 다르므로 방문 전에 전화로 확인하는 것이 좋습니다.",
   };
+}
+
+export async function createVoiceAnswerWithAi(
+  mode: VoiceMode,
+  transcript: string,
+  context: VoiceAnswerContext = {},
+): Promise<EasyJobSummary> {
+  const fallback = createVoiceAnswer(mode, transcript, context);
+  return (
+    (await generateVoiceAnswerWithGemini({
+      mode,
+      transcript,
+      previousWork: context.previousWork,
+      healthLimit: context.healthLimit,
+      preferredTime: context.preferredTime,
+      candidateJobs: context.candidateJobs,
+      fallback,
+    })) ?? fallback
+  );
 }
 
 function createJobSpecificRecommendation(
@@ -281,4 +310,9 @@ export function createRecommendation(): RecommendationResponse {
       },
     ],
   };
+}
+
+export async function createRecommendationWithAi(jobs: Job[] = []): Promise<RecommendationResponse> {
+  const fallback = createRecommendation();
+  return (await generateRecommendationsWithGemini(jobs, fallback)) ?? fallback;
 }
